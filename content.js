@@ -1,20 +1,42 @@
 (function () {
-  const colors = { "Unrated,": "#000000","Newbie": "#808080", "Pupil": "#008000", "Specialist": "#03a89e", "Expert": "#0000ff", "Candidate Master": "#aa00aa", "Master": "#ff8c00", "International Master": "#ff8c00", "Grandmaster": "#ff0000", "International Grandmaster": "#ff0000", "Legendary Grandmaster": "#ff0000" };
+  const colors = { "Unrated,": "#000000", "Newbie": "#808080", "Pupil": "#008000", "Specialist": "#03a89e", "Expert": "#0000ff", "Candidate Master": "#aa00aa", "Master": "#ff8c00", "International Master": "#ff8c00", "Grandmaster": "#ff0000", "International Grandmaster": "#ff0000", "Legendary Grandmaster": "#ff0000" };
   const standingsTable = document.querySelector('.datatable');
   const pagination = document.querySelector('.custom-links-pagination');
   const parentNode = document.querySelector('#pageContent');
   let count = 1;
 
 
+  function processMenuList(selector) {
+    const ul = document.querySelector(selector);
+    if (!ul) return '';
+
+    let result = '<ul class="second-level-menu-list">';
+    
+    const listItems = ul.children;
+    for (let li of listItems) {
+        const a = li.querySelector('a');
+        if (a) {
+            result += '<li>' + a.outerHTML + '</li>';
+        }
+    }
+    
+    result += '</ul>';
+    return result;
+}
+
 
   function createButton() {
-    const list = document.querySelector('.second-level-menu');
-    const ul = document.createElement('ul');
-    ul.className = 'second-level-menu-list';
-    list.appendChild(ul);
-    ul.innerHTML += `<li class="noLava"><a>|</a></li>`;
-    ul.innerHTML += `<li><a href="#">Hacks Standings</a></li>`;
-    ul.lastChild.addEventListener('click', getAndInsertTable);
+    const parent = document.querySelector('.second-level-menu');
+    const defaultButtons = processMenuList('.second-level-menu-list');
+    parent.innerHTML = defaultButtons;
+    const list = document.querySelector('.second-level-menu-list');
+    const pipe = document.createElement('li');
+    pipe.innerHTML = `<a>|</a>`;
+    const HacksButton = document.createElement('li');
+    HacksButton.innerHTML = `<a href="#">Hacks Standings</a>`;
+    list.appendChild(pipe);
+    list.appendChild(HacksButton);
+    list.lastChild.addEventListener('click', getAndInsertTable);
   }
 
   function parseResponse(response) {
@@ -82,7 +104,17 @@
         return { error: errorMessage };
       }
       hackerArray = Object.values(hackers);
-      hackerArray.sort((a, b) => b.totalSuccess - a.totalSuccess);
+      hackerArray.sort((a, b) => {
+        if (b.totalSuccess !== a.totalSuccess) {
+          return b.totalSuccess - a.totalSuccess;
+        }
+        else if (b.totalFail !== a.totalFail) {
+          return a.totalFail - b.totalFail;
+        }
+        else {
+          return a.handle.localeCompare(b.handle);
+        }
+      });
       // console.log(hackerArray);
       return { arr: hackerArray };
     }
@@ -97,19 +129,20 @@
       target.textContent = "Fetching data, please wait  /"
     else
       target.textContent = "Fetching data, please wait  -"
-    count++;
-    
+    count = (count + 1) % 3;
+
   }
   function getAndInsertTable(event) {
     const existingTable = document.getElementById('hacksStandingsTable');
-    if(existingTable)
-    {
-      return;
+    if (existingTable) {
+      existingTable.remove();
     }
-    if (standingsTable)
+    if (standingsTable) {
       standingsTable.remove();
-    if (pagination)
+    }
+    if (pagination) {
       pagination.remove();
+    }
     let newParagraph;
     if (!document.querySelector('.HacksLoader')) {
       newParagraph = document.createElement('p');
@@ -128,26 +161,26 @@
       if (response) {
         clearInterval(loadingSign);
         if (newParagraph) {
-        newParagraph.remove();
-        if (response.hasOwnProperty('error')) {
-          alert("Failed to fetch hacks standings data.\n" + response.error);
-        }
-        else {
-          // console.log(response);
-          parsingResult = parseResponse(response);
-          if (parsingResult.hasOwnProperty('error')) {
-            alert(parsingResult.error);
+          newParagraph.remove();
+          if (response.hasOwnProperty('error')) {
+            alert("Failed to fetch hacks standings data.\n" + response.error);
           }
           else {
-            insertTable(parsingResult.arr,response.probIndices,contestId);
+            // console.log(response);
+            parsingResult = parseResponse(response);
+            if (parsingResult.hasOwnProperty('error')) {
+              alert(parsingResult.error);
+            }
+            else {
+              insertTable(parsingResult.arr, response.probIndices, contestId);
+            }
           }
-        }
         }
       }
     });
   }
 
-  function insertTable(hackerArray, probIndices,contestId) {
+  function insertTable(hackerArray, probIndices, contestId) {
 
 
 
@@ -160,16 +193,14 @@
 
     const thead = table.createTHead();
     const headerRow = thead.insertRow();
-    const headers = ['Rank', 'User', 'Hacks : Fails'];
-    probIndices.forEach(index => {index = index.toUpperCase(); headers.push(index)});
-    headers.forEach((headerText,index) => {
+    const headers = ['Rank', 'User', 'Hacks'];
+    probIndices.forEach(index => { index = index.toUpperCase(); headers.push(index) });
+    headers.forEach((headerText, index) => {
       const th = document.createElement('th');
-      if(index >= 3)
-      {
+      if (index >= 3) {
         th.innerHTML = `<a href="https://codeforces.com/contest/${contestId}/problem/${headerText}">${headerText}</a>`;
       }
-      else
-      {
+      else {
         th.innerHTML = headerText;
       }
       th.style.border = '1px solid #ddd';
@@ -189,30 +220,26 @@
       const cells = [
         index + 1,
         hacker.handle,
-        [hacker.totalSuccess,hacker.totalFail]
+        [hacker.totalSuccess, hacker.totalFail]
       ];
       probIndices.forEach(index => {
         index = index.toUpperCase();
-        cells.push([hacker[index].successCount,hacker[index].failCount]);
+        cells.push([hacker[index].successCount, hacker[index].failCount]);
       });
       cells.forEach((value, index) => {
         const cell = row.insertCell();
         if (index === 1) {
           cell.innerHTML = `<a style ="font-family: Helvetica;font-weight:700;text-decoration:none; color:${colors[rank]}" href="https://codeforces.com/profile/${hacker.handle}" target="_blank">${hacker.handle}</a>`;
         }
-        else if(index >= 2)
-        {
-          if(value[0] === 0 && value[1] === 0)
-          {
+        else if (index >= 2) {
+          if (value[0] === 0 && value[1] === 0) {
             cell.innerHTML = `-`;
           }
-          else
-          {
-            cell.innerHTML = `<span style = "color: green">+${value[0]}</span> : <span style = "color: red">-${value[1]}</span>`;
+          else {
+            cell.innerHTML = `<span style = "color: green" title = "Successful hacking attempts">+${value[0]}</span> : <span style = "color: red" title = "Unsuccessful hacking attempts">-${value[1]}</span>`;
           }
         }
-        else
-        {
+        else {
           cell.textContent = value;
         }
         cell.style.border = '1px solid #ddd';
@@ -227,6 +254,12 @@
   }
 
   createButton();
+  setTimeout(()=>{ $(".second-level-menu-list").lavaLamp({
+    fx: "backout",
+    speed: 700
+  });}, 100);
+  
+
 })();
 
 
