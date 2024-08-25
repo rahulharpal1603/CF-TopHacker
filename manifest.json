@@ -1,0 +1,19 @@
+{
+    "manifest_version": 3,
+    "name": "Codeforces Hacks Standings",
+    "version": "1.0",
+    "description": "Adds a 'Hacks Standings' button to Codeforces contest standings page",
+    "permissions": ["activeTab", "scripting"],
+    "host_permissions": [
+      "https://codeforces.com/*"
+    ],
+    "background": {
+      "service_worker": "background.js"
+    },
+    "content_scripts": [
+      {
+        "matches": ["https://codeforces.com/contest/*/standings*","https://codeforces.com/contest/*/ratings*"],
+        "js": ["content.js"]
+      }
+    ]
+  }
