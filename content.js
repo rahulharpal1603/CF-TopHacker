@@ -1,14 +1,14 @@
 (function () {
   const colors = {
     "Unrated,": "#000000",
-    "Newbie": "#808080",
-    "Pupil": "#008000",
-    "Specialist": "#03a89e",
-    "Expert": "#0000ff",
+    Newbie: "#808080",
+    Pupil: "#008000",
+    Specialist: "#03a89e",
+    Expert: "#0000ff",
     "Candidate Master": "#aa00aa",
-    "Master": "#ff8c00",
+    Master: "#ff8c00",
     "International Master": "#ff8c00",
-    "Grandmaster": "#ff0000",
+    Grandmaster: "#ff0000",
     "International Grandmaster": "#ff0000",
     "Legendary Grandmaster": "#ff0000",
   };
@@ -36,14 +36,14 @@
   }
 
   function createButton() {
-    const parent = document.querySelector(".second-level-menu");
-    const defaultButtons = processMenuList(".second-level-menu-list");
-    parent.innerHTML = defaultButtons;
-    const list = document.querySelector(".second-level-menu-list");
     const pipe = document.createElement("li");
     pipe.innerHTML = `<a>|</a>`;
     const HacksButton = document.createElement("li");
     HacksButton.innerHTML = `<a href="#">Hacks Standings</a>`;
+    const parent = document.querySelector(".second-level-menu");
+    const defaultButtons = processMenuList(".second-level-menu-list");
+    parent.innerHTML = defaultButtons;
+    const list = document.querySelector(".second-level-menu-list");
     list.appendChild(pipe);
     list.appendChild(HacksButton);
     list.lastChild.addEventListener("click", getAndInsertTable);
@@ -145,12 +145,16 @@
 
   function loader() {
     let target = parentNode.lastChild;
-    if (count % 3 === 0) target.textContent = "Fetching data, please wait  |";
-    else if (count % 3 === 1)
+    if (count % 3 === 0) {
+      target.textContent = "Fetching data, please wait  |";
+    } else if (count % 3 === 1) {
       target.textContent = "Fetching data, please wait  /";
-    else target.textContent = "Fetching data, please wait  -";
+    } else {
+      target.textContent = "Fetching data, please wait  -";
+    }
     count = (count + 1) % 3;
   }
+
   function getAndInsertTable(event) {
     const existingTable = document.getElementById("hacksStandingsTable");
     if (existingTable) {
@@ -174,6 +178,7 @@
       parentNode.appendChild(newParagraph);
     }
     let loadingSign = setInterval(loader, 150);
+
     const contestId = window.location.pathname.split("/")[2];
     console.log(contestId);
     chrome.runtime.sendMessage(
