@@ -1,42 +1,52 @@
 (function () {
-  const colors = { "Unrated,": "#000000", "Newbie": "#808080", "Pupil": "#008000", "Specialist": "#03a89e", "Expert": "#0000ff", "Candidate Master": "#aa00aa", "Master": "#ff8c00", "International Master": "#ff8c00", "Grandmaster": "#ff0000", "International Grandmaster": "#ff0000", "Legendary Grandmaster": "#ff0000" };
-  const standingsTable = document.querySelector('.datatable');
-  const pagination = document.querySelector('.custom-links-pagination');
-  const parentNode = document.querySelector('#pageContent');
+  const colors = {
+    "Unrated,": "#000000",
+    "Newbie": "#808080",
+    "Pupil": "#008000",
+    "Specialist": "#03a89e",
+    "Expert": "#0000ff",
+    "Candidate Master": "#aa00aa",
+    "Master": "#ff8c00",
+    "International Master": "#ff8c00",
+    "Grandmaster": "#ff0000",
+    "International Grandmaster": "#ff0000",
+    "Legendary Grandmaster": "#ff0000",
+  };
+  const standingsTable = document.querySelector(".datatable");
+  const pagination = document.querySelector(".custom-links-pagination");
+  const parentNode = document.querySelector("#pageContent");
   let count = 1;
-
 
   function processMenuList(selector) {
     const ul = document.querySelector(selector);
-    if (!ul) return '';
+    if (!ul) return "";
 
     let result = '<ul class="second-level-menu-list">';
-    
+
     const listItems = ul.children;
     for (let li of listItems) {
-        const a = li.querySelector('a');
-        if (a) {
-            result += '<li>' + a.outerHTML + '</li>';
-        }
+      const a = li.querySelector("a");
+      if (a) {
+        result += "<li>" + a.outerHTML + "</li>";
+      }
     }
-    
-    result += '</ul>';
-    return result;
-}
 
+    result += "</ul>";
+    return result;
+  }
 
   function createButton() {
-    const parent = document.querySelector('.second-level-menu');
-    const defaultButtons = processMenuList('.second-level-menu-list');
+    const parent = document.querySelector(".second-level-menu");
+    const defaultButtons = processMenuList(".second-level-menu-list");
     parent.innerHTML = defaultButtons;
-    const list = document.querySelector('.second-level-menu-list');
-    const pipe = document.createElement('li');
+    const list = document.querySelector(".second-level-menu-list");
+    const pipe = document.createElement("li");
     pipe.innerHTML = `<a>|</a>`;
-    const HacksButton = document.createElement('li');
+    const HacksButton = document.createElement("li");
     HacksButton.innerHTML = `<a href="#">Hacks Standings</a>`;
     list.appendChild(pipe);
     list.appendChild(HacksButton);
-    list.lastChild.addEventListener('click', getAndInsertTable);
+    list.lastChild.addEventListener("click", getAndInsertTable);
   }
 
   function parseResponse(response) {
@@ -46,12 +56,13 @@
     hackTable = response.hackTable;
     probIndices = response.probIndices;
     const parser = new DOMParser();
-    const doc = parser.parseFromString(hackTable.html, 'text/html');
-    const hackTableBody = doc.querySelector('.challenges-frame-datatable tbody');
+    const doc = parser.parseFromString(hackTable.html, "text/html");
+    const hackTableBody = doc.querySelector(
+      ".challenges-frame-datatable tbody"
+    );
     if (!hackTableBody) {
       return { error: errorMessage };
-    }
-    else {
+    } else {
       //Initialising variables
       let hackers = {};
       const rowsArray = hackTableBody.children;
@@ -62,28 +73,43 @@
       }
       for (let i = 0; i < rowsArray.length; i++) {
         const row = rowsArray[i];
-        if (row.attributes.hasOwnProperty('challengeid')) {
+        if (row.attributes.hasOwnProperty("challengeid")) {
           hacksPresent = true;
           let rowChildren = row.children;
-          let userInfo = rowChildren[2].querySelector("a").attributes['title'].value.trim().split(' ');
+          let userInfo = rowChildren[2]
+            .querySelector("a")
+            .attributes["title"].value.trim()
+            .split(" ");
           let userRank;
           let userHandle;
           if (userInfo.length === 3) {
             userRank = `${userInfo[0].trim()} ${userInfo[1].trim()}`;
             userHandle = userInfo[2].trim();
-          }
-          else {
+          } else {
             userRank = userInfo[0].trim();
             userHandle = userInfo[1].trim();
           }
-          let problem = rowChildren[4].querySelector("a").innerHTML.trim().split(' ')[0].trim();
-          let verdict = rowChildren[6].querySelector("span").innerHTML.trim().split(' ')[0].trim();
+          let problem = rowChildren[4]
+            .querySelector("a")
+            .innerHTML.trim()
+            .split(" ")[0]
+            .trim();
+          let verdict = rowChildren[6]
+            .querySelector("span")
+            .innerHTML.trim()
+            .split(" ")[0]
+            .trim();
           // console.log(userHandle, userRank, problem, verdict);
 
           if (verdict === OKVerdict || verdict === NOKVerdict) {
             if (!hackers.hasOwnProperty(userHandle)) {
               hackers[userHandle] = {};
-              let objTemplate = { handle: userHandle, rank: userRank, totalSuccess: 0, totalFail: 0 };
+              let objTemplate = {
+                handle: userHandle,
+                rank: userRank,
+                totalSuccess: 0,
+                totalFail: 0,
+              };
               for (let i = 0; i < probIndices.length; i++) {
                 objTemplate[probIndices[i]] = { successCount: 0, failCount: 0 };
               }
@@ -92,8 +118,7 @@
             if (verdict === OKVerdict) {
               hackers[userHandle][problem].successCount++;
               hackers[userHandle].totalSuccess++;
-            }
-            else if (verdict === NOKVerdict) {
+            } else if (verdict === NOKVerdict) {
               hackers[userHandle][problem].failCount++;
               hackers[userHandle].totalFail++;
             }
@@ -107,33 +132,27 @@
       hackerArray.sort((a, b) => {
         if (b.totalSuccess !== a.totalSuccess) {
           return b.totalSuccess - a.totalSuccess;
-        }
-        else if (b.totalFail !== a.totalFail) {
+        } else if (b.totalFail !== a.totalFail) {
           return a.totalFail - b.totalFail;
-        }
-        else {
+        } else {
           return a.handle.localeCompare(b.handle);
         }
       });
       // console.log(hackerArray);
       return { arr: hackerArray };
     }
-
   }
 
   function loader() {
     let target = parentNode.lastChild;
-    if (count % 3 === 0)
-      target.textContent = "Fetching data, please wait  |"
+    if (count % 3 === 0) target.textContent = "Fetching data, please wait  |";
     else if (count % 3 === 1)
-      target.textContent = "Fetching data, please wait  /"
-    else
-      target.textContent = "Fetching data, please wait  -"
+      target.textContent = "Fetching data, please wait  /";
+    else target.textContent = "Fetching data, please wait  -";
     count = (count + 1) % 3;
-
   }
   function getAndInsertTable(event) {
-    const existingTable = document.getElementById('hacksStandingsTable');
+    const existingTable = document.getElementById("hacksStandingsTable");
     if (existingTable) {
       existingTable.remove();
     }
@@ -144,69 +163,68 @@
       pagination.remove();
     }
     let newParagraph;
-    if (!document.querySelector('.HacksLoader')) {
-      newParagraph = document.createElement('p');
-      newParagraph.className = 'HacksLoader';
+    if (!document.querySelector(".HacksLoader")) {
+      newParagraph = document.createElement("p");
+      newParagraph.className = "HacksLoader";
       newParagraph.textContent = "Fetching data, please wait  |";
-      newParagraph.style.fontFamily = 'Helvetica';
-      newParagraph.style.fontWeight = '500';
-      newParagraph.style.fontSize = '18px';
-      newParagraph.style.textAlign = 'center';
+      newParagraph.style.fontFamily = "Helvetica";
+      newParagraph.style.fontWeight = "500";
+      newParagraph.style.fontSize = "18px";
+      newParagraph.style.textAlign = "center";
       parentNode.appendChild(newParagraph);
     }
     let loadingSign = setInterval(loader, 150);
-    const contestId = window.location.pathname.split('/')[2];
+    const contestId = window.location.pathname.split("/")[2];
     console.log(contestId);
-    chrome.runtime.sendMessage({ action: "getHacksStandings", contestId: contestId }, (response) => {
-      if (response) {
-        clearInterval(loadingSign);
-        if (newParagraph) {
-          newParagraph.remove();
-          if (response.hasOwnProperty('error')) {
-            alert("Failed to fetch hacks standings data.\n" + response.error);
-          }
-          else {
-            // console.log(response);
-            parsingResult = parseResponse(response);
-            if (parsingResult.hasOwnProperty('error')) {
-              alert(parsingResult.error);
-            }
-            else {
-              insertTable(parsingResult.arr, response.probIndices, contestId);
+    chrome.runtime.sendMessage(
+      { action: "getHacksStandings", contestId: contestId },
+      (response) => {
+        if (response) {
+          clearInterval(loadingSign);
+          if (newParagraph) {
+            newParagraph.remove();
+            if (response.hasOwnProperty("error")) {
+              alert("Failed to fetch hacks standings data.\n" + response.error);
+            } else {
+              // console.log(response);
+              parsingResult = parseResponse(response);
+              if (parsingResult.hasOwnProperty("error")) {
+                alert(parsingResult.error);
+              } else {
+                insertTable(parsingResult.arr, response.probIndices, contestId);
+              }
             }
           }
         }
       }
-    });
+    );
   }
 
   function insertTable(hackerArray, probIndices, contestId) {
-
-
-
-
-    const table = document.createElement('table');
-    table.id = 'hacksStandingsTable';
-    table.style.width = '100%';
-    table.style.borderCollapse = 'collapse';
-    table.style.marginTop = '20px';
+    const table = document.createElement("table");
+    table.id = "hacksStandingsTable";
+    table.style.width = "100%";
+    table.style.borderCollapse = "collapse";
+    table.style.marginTop = "20px";
 
     const thead = table.createTHead();
     const headerRow = thead.insertRow();
-    const headers = ['Rank', 'User', 'Hacks'];
-    probIndices.forEach(index => { index = index.toUpperCase(); headers.push(index) });
+    const headers = ["Rank", "User", "Hacks"];
+    probIndices.forEach((index) => {
+      index = index.toUpperCase();
+      headers.push(index);
+    });
     headers.forEach((headerText, index) => {
-      const th = document.createElement('th');
+      const th = document.createElement("th");
       if (index >= 3) {
         th.innerHTML = `<a href="https://codeforces.com/contest/${contestId}/problem/${headerText}">${headerText}</a>`;
-      }
-      else {
+      } else {
         th.innerHTML = headerText;
       }
-      th.style.border = '1px solid #ddd';
-      th.style.padding = '8px';
-      th.style.backgroundColor = '#f2f2f2';
-      th.style.textAlign = 'center';
+      th.style.border = "1px solid #ddd";
+      th.style.padding = "8px";
+      th.style.backgroundColor = "#f2f2f2";
+      th.style.textAlign = "center";
       headerRow.appendChild(th);
     });
 
@@ -220,9 +238,9 @@
       const cells = [
         index + 1,
         hacker.handle,
-        [hacker.totalSuccess, hacker.totalFail]
+        [hacker.totalSuccess, hacker.totalFail],
       ];
-      probIndices.forEach(index => {
+      probIndices.forEach((index) => {
         index = index.toUpperCase();
         cells.push([hacker[index].successCount, hacker[index].failCount]);
       });
@@ -230,21 +248,18 @@
         const cell = row.insertCell();
         if (index === 1) {
           cell.innerHTML = `<a style ="font-family: Helvetica;font-weight:700;text-decoration:none; color:${colors[rank]}" href="https://codeforces.com/profile/${hacker.handle}" target="_blank">${hacker.handle}</a>`;
-        }
-        else if (index >= 2) {
+        } else if (index >= 2) {
           if (value[0] === 0 && value[1] === 0) {
             cell.innerHTML = `-`;
-          }
-          else {
+          } else {
             cell.innerHTML = `<span style = "color: green" title = "Successful hacking attempts">+${value[0]}</span> : <span style = "color: red" title = "Unsuccessful hacking attempts">-${value[1]}</span>`;
           }
-        }
-        else {
+        } else {
           cell.textContent = value;
         }
-        cell.style.border = '1px solid #ddd';
-        cell.style.padding = '8px';
-        cell.style.textAlign = 'center';
+        cell.style.border = "1px solid #ddd";
+        cell.style.padding = "8px";
+        cell.style.textAlign = "center";
       });
     });
 
@@ -254,12 +269,10 @@
   }
 
   createButton();
-  setTimeout(()=>{ $(".second-level-menu-list").lavaLamp({
-    fx: "backout",
-    speed: 700
-  });}, 100);
-  
-
+  setTimeout(() => {
+    $(".second-level-menu-list").lavaLamp({
+      fx: "backout",
+      speed: 700,
+    });
+  }, 100);
 })();
-
-
