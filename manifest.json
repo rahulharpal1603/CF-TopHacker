@@ -13,7 +13,7 @@
     "content_scripts": [
       {
         "matches": ["https://codeforces.com/contest/*/standings*","https://codeforces.com/contest/*/ratings*"],
-        "js": ["jquery.min.js", "jquery.easing.min.js","jquery.lavalamp.min.js","content.js"]
+        "js": ["jquery/jquery.min.js", "jquery/jquery.easing.min.js","jquery/jquery.lavalamp.min.js","content.js"]
       }
     ]
   }
