@@ -22,7 +22,7 @@
   const contestStatus = document.querySelector(".contest-status");
   let count = 1; // for loader animation
 
-  //Function to remove the existing hover effect from the menu items
+  //Function to remove the existing hover effect from the menu items, which will be reapplied later
   function processMenuList(selector) {
     const ul = document.querySelector(selector);
     if (!ul) return "";
@@ -338,6 +338,7 @@
   }
 
   createButton();
+  //Reapplying the lavaLamp effect on the menu items
   setTimeout(() => {
     $(".second-level-menu-list").lavaLamp({
       fx: "backout",
