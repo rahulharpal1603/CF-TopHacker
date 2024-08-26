@@ -18,7 +18,9 @@
   const standingsTable = document.querySelector(".datatable");
   const pagination = document.querySelector(".custom-links-pagination");
   const parentNode = document.querySelector("#pageContent");
-  const showUnofficialToggle = document.querySelector(".toggle-show-unofficial");
+  const showUnofficialToggle = document.querySelector(
+    ".toggle-show-unofficial"
+  );
   const contestStatus = document.querySelector(".contest-status");
   let count = 1; // for loader animation
 
@@ -34,8 +36,9 @@
       const a = li.querySelector("a");
       if (a) {
         let classAttribute = "";
-        if(a.innerHTML.trim() === '|') //To prevent lavaLamp effect on pipe
-          classAttribute = 'class="noLava"'; 
+        if (a.innerHTML.trim() === "|")
+          //To prevent lavaLamp effect on pipe
+          classAttribute = 'class="noLava"';
         result += `<li ${classAttribute}>  ${a.outerHTML}  </li>`;
       }
     }
@@ -203,7 +206,7 @@
     let loadingSign = setInterval(loaderFunc, 150);
 
     const contestId = window.location.pathname.split("/")[2]; //Extracting the contestId from the URL
-    
+
     //Sending a message to the background.js file to fetch the HTML file for the hacks page (Only one request is needed to fetch the hacks page)
     chrome.runtime.sendMessage(
       { action: "getHacksStandings", contestId: contestId },
@@ -286,8 +289,8 @@
     //Creating the body of the table
     const tbody = table.createTBody();
     let totals = [];
-    for(let i = 0; i < probIndices.length+1; i++){
-      totals.push({success: 0, fail: 0});
+    for (let i = 0; i < probIndices.length + 1; i++) {
+      totals.push({ success: 0, fail: 0 });
     }
     //Iterating over each hacker and inserting their information into the table
     hackerArray.forEach((hacker, index) => {
@@ -301,11 +304,14 @@
         [hacker.totalSuccess, hacker.totalFail],
       ];
       //Iterating over each problem and inserting the number of successful and unsuccessful hacks
-      probIndices.forEach((probIndex,index) => {
+      probIndices.forEach((probIndex, index) => {
         probIndex = probIndex.toUpperCase();
-        cells.push([hacker[probIndex].successCount, hacker[probIndex].failCount]);
-        totals[index+1].success += hacker[probIndex].successCount;
-        totals[index+1].fail += hacker[probIndex].failCount;
+        cells.push([
+          hacker[probIndex].successCount,
+          hacker[probIndex].failCount,
+        ]);
+        totals[index + 1].success += hacker[probIndex].successCount;
+        totals[index + 1].fail += hacker[probIndex].failCount;
       });
       //Inserting the hacker's information into the table
       cells.forEach((value, index) => {
