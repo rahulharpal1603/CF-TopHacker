@@ -49,14 +49,14 @@
 
   //Function to create a new button for "Hacks Standings" in the menu
   function createButton() {
-    const pipe = document.createElement("li");
-    pipe.className = "noLava"; // Prevent lavaLamp effect on the pipe (|) character
-    pipe.innerHTML = `<a>|</a>`;
-    const HacksButton = document.createElement("li");
-    HacksButton.innerHTML = `<a href="#">Hacks Standings</a>`;
     const parent = document.querySelector(".second-level-menu");
     const defaultButtons = processMenuList(".second-level-menu-list");
     parent.innerHTML = defaultButtons;
+    const pipe = document.createElement("li");
+    const HacksButton = document.createElement("li");
+    pipe.className = "noLava"; // Prevent lavaLamp effect on the pipe (|) character
+    pipe.innerHTML = `<a>|</a>`;
+    HacksButton.innerHTML = `<a href="#">Hacks Standings</a>`;
     const list = document.querySelector(".second-level-menu-list");
     list.appendChild(pipe);
     list.appendChild(HacksButton);
@@ -368,5 +368,10 @@
       fx: "backout",
       speed: 700,
     });
+    let children = document.querySelector(".second-level-menu-list").children;
+    if(children[0].className === children[1].className){
+      children[0].remove();
+      console.log("Removed");
+    }
   }, 100);
 })();
