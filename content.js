@@ -317,8 +317,21 @@
       cells.forEach((value, index) => {
         const cell = row.insertCell();
         if (index === 1) {
-          cell.innerHTML = `<a style ="font-family: Helvetica;font-weight:700;text-decoration:none; color:${colors[rank]}" href="https://codeforces.com/profile/${hacker.handle}" target="_blank">${hacker.handle}</a>`;
+          let text = `${hacker.handle}`;
+          let fontWeight = 700;
+          if (rank === "Legendary Grandmaster") {
+            //First letter of LGM is black
+            text = `<span style = "color:#000000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
+          } else if (rank === "Unrated,") {
+            //Unrated users are shown in black color but with a lighter font-weight
+            fontWeight = 400;
+          }
+          //Creating the template for the hacker's handle
+          let template = `<a style ="font-family: Helvetica;font-weight:${fontWeight};text-decoration:none; color:${colors[rank]}" href="https://codeforces.com/profile/${hacker.handle}" target="_blank">${text}</a>`;
+          //Inserting the hacker's handle into the cell
+          cell.innerHTML = template;
         } else if (index >= 2) {
+          //Inserting the number of successful and unsuccessful hacks into the cell
           if (value[0] === 0 && value[1] === 0) {
             cell.innerHTML = `-`;
           } else {
