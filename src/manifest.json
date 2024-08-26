@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "CFTopHacker",
+    "name": "CF TopHacker",
     "version": "0.1",
     "description": "Adds a 'Hacks Standings' button to Codeforces contest standings page",
     "icons": {
@@ -8,14 +8,10 @@
       "32": "icons/logo.png",
       "48": "icons/logo.png"
     },
-    "permissions": ["activeTab", "scripting"],
-    "host_permissions": [
-      "https://codeforces.com/*"
-    ],
     "action": {
       "browser_style": true,
       "default_icon": "icons/logo.png",
-      "default_title": "CFTopHacker",
+      "default_title": "CF TopHacker",
       "default_popup": "popup.html"
     },
     "background": {
