@@ -173,7 +173,11 @@
     count = (count + 1) % 3;
   }
 
+  let alreadyRunning = false;
   function getAndInsertTable(event) {
+    if (alreadyRunning) {return;}
+    alreadyRunning = true;
+    console.log("Fetching Hacks Standings");
     const existingTable = document.getElementById("hacksStandingsTable");
     if (existingTable) {
       //Remove the existing table if it is present, to refresh the hacks standings
@@ -227,6 +231,7 @@
             }
           }
         }
+        alreadyRunning = false;
       }
     );
   }

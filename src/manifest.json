@@ -15,7 +15,7 @@
     "action": {
       "browser_style": true,
       "default_icon": "icons/logo.png",
-      "default_title": "HacksStandings",
+      "default_title": "CFTopHacker",
       "default_popup": "popup.html"
     },
     "background": {
