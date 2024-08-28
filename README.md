@@ -16,3 +16,14 @@ Installation:
 <a href="https://chromewebstore.google.com/detail/cf-tophacker/jjonaiodlgelhegbbihodicniiccbhbi"><img src="https://i.imgur.com/iswHnpJ.png" alt="Chrome Web Store" height="48"></a>
 
 Demo Video: https://www.youtube.com/watch?v=J4P4t6bTUHk&t=5s
+
+Screenshots:
+
+![Screenshot 1](https://github.com/user-attachments/assets/0f65cf40-bf78-4711-be73-b1ae30a20311)
+
+![Screenshot 2](https://github.com/user-attachments/assets/7266cff2-3b95-4293-a52b-5f6a9d396de1)
+
+![Screenshot 3](https://github.com/user-attachments/assets/5137232d-1e1f-4923-80e4-558ce75992c6)
+
+
+
