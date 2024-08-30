@@ -15,6 +15,9 @@ Installation:
 
 <a href="https://chromewebstore.google.com/detail/cf-tophacker/jjonaiodlgelhegbbihodicniiccbhbi"><img src="https://i.imgur.com/iswHnpJ.png" alt="Chrome Web Store" height="48"></a>
 
+<a href="https://chromewebstore.google.com/detail/cf-tophacker/jjonaiodlgelhegbbihodicniiccbhbi">Web Store Link</a>
+
+
 Demo Video: [https://www.youtube.com/watch?v=J4P4t6bTUHk&t=5s](https://youtu.be/J4P4t6bTUHk?si=4Z2wSOqq6b1oFWbd)
 
 Screenshots:
