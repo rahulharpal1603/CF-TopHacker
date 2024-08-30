@@ -4,7 +4,7 @@
 ![Version](https://img.shields.io/badge/Version-0.1-blue)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 ![Contributors](https://img.shields.io/badge/Contributors-1-green)
-![Open Issues](https://img.shields.io/badge/Issues-2-red)
+![Open Issues](https://img.shields.io/badge/Issues-3-red)
 
 Chrome extension for displaying Hacks leaderboard on CF.
 
