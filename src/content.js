@@ -1,18 +1,30 @@
 (function () {
   //mapping between user ranks and their corresponding colors
-  const colors = {
-    "Unrated,": "#000000",
-    Newbie: "#808080",
-    Pupil: "#008000",
-    Specialist: "#03a89e",
-    Expert: "#0000ff",
-    "Candidate Master": "#aa00aa",
-    Master: "#ff8c00",
-    "International Master": "#ff8c00",
-    Grandmaster: "#ff0000",
-    "International Grandmaster": "#ff0000",
-    "Legendary Grandmaster": "#ff0000",
-  };
+const colors = {
+  "Unrated,": "#000000",
+  "Не рейтинге,": "#000000",
+  Newbie: "#808080",
+  Новичок: "#808080",
+  Pupil: "#008000",
+  Ученик: "#008000",
+  Specialist: "#03a89e",
+  Специалист: "#03a89e",
+  Expert: "#0000ff",
+  Эксперт: "#0000ff",
+  "Candidate Master": "#aa00aa",
+  "Кандидат мастера": "#aa00aa",
+  Master: "#ff8c00",
+  Мастер: "#ff8c00",
+  "International Master": "#ff8c00",
+  "Международный мастер": "#ff8c00",
+  Grandmaster: "#ff0000",
+  Гроссмейстер: "#ff0000",
+  "International Grandmaster": "#ff0000",
+  "Международный гроссмейстер": "#ff0000",
+  "Legendary Grandmaster": "#ff0000",
+  "Легендарный гроссмейстер": "#ff0000",
+};
+
 
   // Select various elements from the DOM that will be removed/modified
   const standingsTable = document.querySelector(".datatable");
@@ -101,12 +113,15 @@
           if (userInfo.length === 3) {
             //Case where user has ranks: CM,IM,IGM,LGM
             userRank = `${userInfo[0].trim()} ${userInfo[1].trim()}`;
-            userHandle = userInfo[2].trim();
-          } else {
+            // userHandle = userInfo[2].trim();
+          }else if (userInfo.length === 4) {
+            //Case where user has ranks: CM,IM,IGM,LGM
+            userRank = `${userInfo[0].trim()} ${userInfo[2].trim()}`;
+          }else {
             //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master
             userRank = userInfo[0].trim();
-            userHandle = userInfo[1].trim();
           }
+           userHandle = userInfo[userInfo.length-1].trim();
           let problem = rowChildren[4]
             .querySelector("a")
             .innerHTML.trim()
@@ -117,7 +132,10 @@
             .innerHTML.trim()
             .split(" ")[0]
             .trim();
-          if (verdict === OKVerdict || verdict === NOKVerdict) {
+           
+           //"Неудачная"==Unsuccessful
+           //Успешный==Successfull
+          if (verdict === OKVerdict || verdict === NOKVerdict || verdict === "Неудачная" || verdict === "Успешный" ) {
             if (!hackers.hasOwnProperty(userHandle)) {
               //Initialising the object for each hacker only if the hacker is not already present in the hackers object
               hackers[userHandle] = {};
@@ -132,10 +150,10 @@
               }
               hackers[userHandle] = objTemplate;
             }
-            if (verdict === OKVerdict) {
+            if (verdict === OKVerdict || verdict === "Успешный" ) {
               hackers[userHandle][problem].successCount++;
               hackers[userHandle].totalSuccess++;
-            } else if (verdict === NOKVerdict) {
+            } else if (verdict === NOKVerdict || verdict === "Неудачная") {
               hackers[userHandle][problem].failCount++;
               hackers[userHandle].totalFail++;
             }
@@ -324,10 +342,10 @@
         if (index === 1) {
           let text = `${hacker.handle}`;
           let fontWeight = 700;
-          if (rank === "Legendary Grandmaster") {
+         if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
             //First letter of LGM is black
             text = `<span style = "color:#000000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
-          } else if (rank === "Unrated,") {
+          } else if (rank === "Unrated" || rank === "Не рейтинге") {
             //Unrated users are shown in black color but with a lighter font-weight
             fontWeight = 400;
           }
