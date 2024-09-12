@@ -115,7 +115,7 @@ const colors = {
             userRank = `${userInfo[0].trim()} ${userInfo[1].trim()}`;
             // userHandle = userInfo[2].trim();
           }else if (userInfo.length === 4) {
-            //Case where user has ranks: CM,IM,IGM,LGM
+            //Case where user has ranks: CM,IM,IGM,LGM and language is Russian
             userRank = `${userInfo[0].trim()} ${userInfo[2].trim()}`;
           }else {
             //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master
@@ -345,7 +345,7 @@ const colors = {
          if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
             //First letter of LGM is black
             text = `<span style = "color:#000000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
-          } else if (rank === "Unrated" || rank === "Не рейтинге") {
+          } else if (rank === "Unrated," || rank === "Не рейтинге,") {
             //Unrated users are shown in black color but with a lighter font-weight
             fontWeight = 400;
           }
