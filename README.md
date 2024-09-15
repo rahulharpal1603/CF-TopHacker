@@ -1,7 +1,7 @@
 ![logo128](https://github.com/user-attachments/assets/c4a782f8-95b9-4644-bf75-53dd5b3b4e9f)
 # CF TopHacker
 
-![Version](https://img.shields.io/badge/Version-0.1-blue)
+![Version](https://img.shields.io/badge/Version-1.0.1-blue)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 ![Contributors](https://img.shields.io/badge/Contributors-2-green)
 ![Open Issues](https://img.shields.io/badge/Issues-3-red)
