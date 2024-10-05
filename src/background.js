@@ -1,3 +1,6 @@
+importScripts("Cache.js");
+CACHE = new Cache();
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === "getHacksStandings") {
     getHacksStandings(request.contestId).then(sendResponse);
@@ -37,25 +40,26 @@ async function getProblemIndices(contestId) {
 }
 
 async function getHacksStandings(contestId) {
-  // URL to fetch hacks standings
-  const url = `https://codeforces.com/contest/${contestId}/hacks?showAll=true`;
+    return CACHE.getOr( contestId ,  async () => {
+    // URL to fetch hacks standings
+    const url = `https://codeforces.com/contest/${contestId}/hacks?showAll=true`;
 
-  // Fetch the hack table HTML content
-  let hackTable = await getHackTable(url);
-  // Fetch the problem indices for the contest
-  let probIndices = await getProblemIndices(contestId);
+    // Fetch the hack table HTML content
+    let hackTable = await getHackTable(url);
+    // Fetch the problem indices for the contest
+    let probIndices = await getProblemIndices(contestId);
 
-  // Check for errors in the fetched data
-  if (hackTable.hasOwnProperty("error")) {
-    return { error: hackTable.error }; // Hack Table doesn't exist
-  } else if (probIndices.hasOwnProperty("error")) {
-    return { error: probIndices.error }; // Could Not Fetch Problem Indices from CF API
-  } else {
-    try {
-      // Return the fetched hack table and problem indices
-      return { hackTable: hackTable, probIndices: probIndices.arr };
-    } catch (error) {
-      return { error: error.toString() }; // Return an object with an error message
+    // Check for errors in the fetched data
+    if (hackTable.hasOwnProperty("error")) {
+      return { error: hackTable.error }; // Hack Table doesn't exist
+    } else if (probIndices.hasOwnProperty("error")) {
+      return { error: probIndices.error }; // Could Not Fetch Problem Indices from CF API
+    } else {
+      try {
+        // Return the fetched hack table and problem indices
+        return { hackTable: hackTable, probIndices: probIndices.arr };
+      } catch (error) {
+        return { error: error.toString() }; // Return an object with an error message
+      }
     }
-  }
-}
+} )  }
