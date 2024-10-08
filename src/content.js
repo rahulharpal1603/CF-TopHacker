@@ -1,30 +1,29 @@
 (function () {
   //mapping between user ranks and their corresponding colors
-const colors = {
-  "Unrated,": "#000000",
-  "Не рейтинге,": "#000000",
-  Newbie: "#808080",
-  Новичок: "#808080",
-  Pupil: "#008000",
-  Ученик: "#008000",
-  Specialist: "#03a89e",
-  Специалист: "#03a89e",
-  Expert: "#0000ff",
-  Эксперт: "#0000ff",
-  "Candidate Master": "#aa00aa",
-  "Кандидат мастера": "#aa00aa",
-  Master: "#ff8c00",
-  Мастер: "#ff8c00",
-  "International Master": "#ff8c00",
-  "Международный мастер": "#ff8c00",
-  Grandmaster: "#ff0000",
-  Гроссмейстер: "#ff0000",
-  "International Grandmaster": "#ff0000",
-  "Международный гроссмейстер": "#ff0000",
-  "Legendary Grandmaster": "#ff0000",
-  "Легендарный гроссмейстер": "#ff0000",
-};
-
+  const colors = {
+    "Unrated,": "#000000",
+    "Не рейтинге,": "#000000",
+    Newbie: "#808080",
+    Новичок: "#808080",
+    Pupil: "#008000",
+    Ученик: "#008000",
+    Specialist: "#03a89e",
+    Специалист: "#03a89e",
+    Expert: "#0000ff",
+    Эксперт: "#0000ff",
+    "Candidate Master": "#aa00aa",
+    "Кандидат мастера": "#aa00aa",
+    Master: "#ff8c00",
+    Мастер: "#ff8c00",
+    "International Master": "#ff8c00",
+    "Международный мастер": "#ff8c00",
+    Grandmaster: "#ff0000",
+    Гроссмейстер: "#ff0000",
+    "International Grandmaster": "#ff0000",
+    "Международный гроссмейстер": "#ff0000",
+    "Legendary Grandmaster": "#ff0000",
+    "Легендарный гроссмейстер": "#ff0000",
+  };
 
   // Select various elements from the DOM that will be removed/modified
   const standingsTable = document.querySelector(".datatable");
@@ -92,6 +91,8 @@ const colors = {
     } else {
       //Initialising variables
       let hackers = {};
+      // Map hacker handle to hack details
+      let hackDetails = new Map();
       const rowsArray = hackTableBody.children;
       let hacksPresent = false;
       if (rowsArray.length === 0) {
@@ -104,6 +105,8 @@ const colors = {
         if (row.attributes.hasOwnProperty("challengeid")) {
           hacksPresent = true;
           let rowChildren = row.children;
+          let challengeId = row.attributes["challengeid"].value;
+          let date = rowChildren[1].innerHTML.trim();
           let userInfo = rowChildren[2]
             .querySelector("a")
             .attributes["title"].value.trim()
@@ -114,31 +117,35 @@ const colors = {
             //Case where user has ranks: CM,IM,IGM,LGM
             userRank = `${userInfo[0].trim()} ${userInfo[1].trim()}`;
             // userHandle = userInfo[2].trim();
-          }else if (userInfo.length === 4) {
+          } else if (userInfo.length === 4) {
             //Case where user has ranks: CM,IM,IGM,LGM and language is Russian
             userRank = `${userInfo[0].trim()} ${userInfo[2].trim()}`;
-          }else {
+          } else {
             //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master
             userRank = userInfo[0].trim();
           }
-           userHandle = userInfo[userInfo.length-1].trim();
+          userHandle = userInfo[userInfo.length - 1].trim();
           let problem = rowChildren[4]
             .querySelector("a")
             .innerHTML.trim()
             .split(" ")[0]
             .trim();
-          let verdict = rowChildren[6]
+          let full_verdict = rowChildren[6]
             .querySelector("span")
-            .innerHTML.trim()
-            .split(" ")[0]
-            .trim();
-           
-           //"Неудачная"==Unsuccessful
-           //Успешный==Successfull
-          if (verdict === OKVerdict || verdict === NOKVerdict || verdict === "Неудачная" || verdict === "Успешный" ) {
+            .innerHTML.trim();
+          let verdict = full_verdict.split(" ")[0].trim();
+          //"Неудачная"==Unsuccessful
+          //Успешный==Successfull
+          if (
+            verdict === OKVerdict ||
+            verdict === NOKVerdict ||
+            verdict === "Неудачная" ||
+            verdict === "Успешный"
+          ) {
             if (!hackers.hasOwnProperty(userHandle)) {
               //Initialising the object for each hacker only if the hacker is not already present in the hackers object
               hackers[userHandle] = {};
+              hackDetails[userHandle] = {};
               let objTemplate = {
                 handle: userHandle,
                 rank: userRank,
@@ -150,12 +157,26 @@ const colors = {
               }
               hackers[userHandle] = objTemplate;
             }
-            if (verdict === OKVerdict || verdict === "Успешный" ) {
+            if (verdict === OKVerdict || verdict === "Успешный") {
               hackers[userHandle][problem].successCount++;
               hackers[userHandle].totalSuccess++;
+              hackDetails[userHandle][problem] =
+                hackDetails[userHandle][problem] || [];
+              hackDetails[userHandle][problem].push({
+                date: date,
+                verdict: full_verdict,
+                id: challengeId,
+              });
             } else if (verdict === NOKVerdict || verdict === "Неудачная") {
               hackers[userHandle][problem].failCount++;
               hackers[userHandle].totalFail++;
+              hackDetails[userHandle][problem] =
+                hackDetails[userHandle][problem] || [];
+              hackDetails[userHandle][problem].push({
+                date: date,
+                verdict: full_verdict,
+                id: challengeId,
+              });
             }
           }
         }
@@ -175,7 +196,7 @@ const colors = {
           return a.handle.localeCompare(b.handle);
         }
       });
-      return { arr: hackerArray };
+      return { arr: hackerArray, hackDetails: hackDetails };
     }
   }
 
@@ -193,7 +214,9 @@ const colors = {
 
   let alreadyRunning = false;
   function getAndInsertTable(event) {
-    if (alreadyRunning) {return;}
+    if (alreadyRunning) {
+      return;
+    }
     alreadyRunning = true;
     console.log("Fetching Hacks Standings");
     const existingTable = document.getElementById("hacksStandingsTable");
@@ -245,7 +268,16 @@ const colors = {
             if (parsingResult.hasOwnProperty("error")) {
               alert(parsingResult.error);
             } else {
-              insertTable(parsingResult.arr, response.probIndices, contestId);
+              const hacksWindow = new HacksWindow(
+                parsingResult.hackDetails,
+                contestId
+              );
+              insertTable(
+                parsingResult.arr,
+                response.probIndices,
+                contestId,
+                hacksWindow
+              );
             }
           }
         }
@@ -279,7 +311,7 @@ const colors = {
     }
   }
 
-  function insertTable(hackerArray, probIndices, contestId) {
+  function insertTable(hackerArray, probIndices, contestId, hacksWindow) {
     const table = document.createElement("table"); //Creating the table element
     table.id = "hacksStandingsTable";
     table.style.width = "100%";
@@ -342,9 +374,14 @@ const colors = {
         if (index === 1) {
           let text = `${hacker.handle}`;
           let fontWeight = 700;
-         if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
+          if (
+            rank === "Legendary Grandmaster" ||
+            rank === "Легендарный гроссмейстер"
+          ) {
             //First letter of LGM is black
-            text = `<span style = "color:#000000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
+            text = `<span style = "color:#000000;">${
+              hacker.handle[0]
+            }</span>${hacker.handle.slice(1)}`;
           } else if (rank === "Unrated," || rank === "Не рейтинге,") {
             //Unrated users are shown in black color but with a lighter font-weight
             fontWeight = 400;
@@ -359,6 +396,13 @@ const colors = {
             cell.innerHTML = `-`;
           } else {
             cell.innerHTML = `<span style = "color: green" title = "Successful hacking attempts">+${value[0]}</span> : <span style = "color: red" title = "Unsuccessful hacking attempts">-${value[1]}</span>`;
+            if (index >= 3) {
+              cell.setAttribute(
+                "hack-details",
+                `${hacker.handle} ${probIndices[index - 3]}`
+              );
+              cell.ondblclick = (event) => hacksWindow.openWindow(cell);
+            }
           }
         } else {
           cell.textContent = value;
@@ -387,7 +431,7 @@ const colors = {
       speed: 700,
     });
     let children = document.querySelector(".second-level-menu-list").children;
-    if(children[0].className === children[1].className){
+    if (children[0].className === children[1].className) {
       children[0].remove();
       console.log("Removed");
     }
