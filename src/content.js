@@ -23,6 +23,8 @@ const colors = {
   "Международный гроссмейстер": "#ff0000",
   "Legendary Grandmaster": "#ff0000",
   "Легендарный гроссмейстер": "#ff0000",
+  Tourist: "#ff0000",
+  Туристический: "#ff0000",
 };
 
 
@@ -371,6 +373,11 @@ const colors = {
       //Adding last row of the table: Total Hacks
       if (index === hackerArray.length - 1) {
         insertLastRow(totals, tbody);
+      }
+      // Highlight this row if it's the current user
+      const currentUserHandle = document.querySelector('.lang-chooser > div:nth-of-type(2) > a:nth-of-type(1)').textContent.trim();
+      if (hacker.handle === currentUserHandle) {
+        row.style.backgroundColor = "#ddeeff"; // Apply highlight
       }
     });
 
