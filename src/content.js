@@ -120,7 +120,7 @@ const colors = {
             //Case where user has ranks: CM,IM,IGM,LGM and language is Russian
             userRank = `${userInfo[0].trim()} ${userInfo[2].trim()}`;
           }else {
-            //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master
+            //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master and Tourist
             userRank = userInfo[0].trim();
           }
            userHandle = userInfo[userInfo.length-1].trim();
