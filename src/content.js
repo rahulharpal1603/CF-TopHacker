@@ -23,8 +23,8 @@ const colors = {
   "Международный гроссмейстер": "#ff0000",
   "Legendary Grandmaster": "#ff0000",
   "Легендарный гроссмейстер": "#ff0000",
-  Tourist: "#ff0000",
-  Туристический: "#ff0000",
+  Tourist: "#000000",
+  Туристический: "#000000",
 };
 
 
@@ -344,7 +344,10 @@ const colors = {
         if (index === 1) {
           let text = `${hacker.handle}`;
           let fontWeight = 700;
-         if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
+          if (rank === "Tourist" || rank === "Туристический") {
+            //First letter of Tourist is red
+            text = `<span style = "color:#ff0000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
+          } else if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
             //First letter of LGM is black
             text = `<span style = "color:#000000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
           } else if (rank === "Unrated," || rank === "Не рейтинге,") {
