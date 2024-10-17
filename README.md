@@ -1,12 +1,25 @@
-![logo128](https://github.com/user-attachments/assets/c4a782f8-95b9-4644-bf75-53dd5b3b4e9f)
 # CF TopHacker
 
-![Version](https://img.shields.io/badge/Version-1.0.1-blue)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-![Contributors](https://img.shields.io/badge/Contributors-2-green)
-![Open Issues](https://img.shields.io/badge/Issues-3-red)
+<p align="center">
+  <!-- Logo in the Center -->
+  <img src="https://github.com/user-attachments/assets/c4a782f8-95b9-4644-bf75-53dd5b3b4e9f" alt="Logo" width="128">
+  <br><br> <!-- Line Breaks for Spacing -->
+<p>
 
-Chrome extension for displaying Hacks leaderboard on CF.
+# CF TopHacker
+
+  <a href="https://github.com/rahulharpal1603/CF-TopHacker/releases/tag/1.0.1">
+    🚀 <img src="https://img.shields.io/badge/Version-1.0.1-blue" alt="Version">
+  </a><a href="https://github.com/prettier/prettier">
+    🎨 <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" alt="Code Style: Prettier">
+  </a><a href="https://github.com/rahulharpal1603/CF-TopHacker/graphs/contributors">
+    👥 <img src="https://img.shields.io/badge/Contributors-2-green" alt="Contributors">
+  </a>
+  <a href="https://github.com/rahulharpal1603/CF-TopHacker/issues">
+    🐛 <img src="https://img.shields.io/badge/Issues-3-red" alt="Open Issues">
+  </a>
+
+  If you like this project, please ⭐ the repository to show your support!
 
 ## Table of Contents
 -  [Description](#description)
