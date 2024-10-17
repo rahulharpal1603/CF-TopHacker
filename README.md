@@ -8,6 +8,14 @@
 
 Chrome extension for displaying Hacks leaderboard on CF.
 
+## Table of Contents
+-  [Description](#description)
+- [Features](#features)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Code of Conduct](#code-of-conduct)
+- [Tools and Technologies Used](#tools-and-technologies-used)
+
 
 # Usage Guide:
 
@@ -28,5 +36,42 @@ Screenshots:
 
 ![Screenshot 3](https://github.com/user-attachments/assets/5137232d-1e1f-4923-80e4-558ce75992c6)
 
+## Description
+CF-TopHacker is a tool designed to help users track and analyze hacking contests on Codeforces. It provides real-time insights into contestant performance and standings.
+
+
+## Features
+- **Live Hacks Leaderboard**: Displays all top hackers for each contest alongside top performers.
+- **Real-Time Updates**: View live hacking results during the hacking phase.
+- **Post-Contest Summary**: After the hacking phase, the leaderboard continues to display the top hackers.
+- **Problem Weakness Analysis**: Helps users identify which problems have weak test cases, enabling better preparation for future contests.
+- **Lightweight Extension**: Efficient and easy to use.
+
+## Usage
+Once the extension is installed, go to any Codeforces contest standings page. You'll see a 'Hacks Standings' button that displays the live hacks leaderboard during the hacking phase and after it ends.
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## Code of Conduct
+
+We expect all contributors to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it to understand our community guidelines and expectations.
+
+## Tools and Technologies Used
+- **Programming Languages:** JavaScript
+- **Frameworks:** Node.js, Express.js
+- **Database:** MongoDB
+- **Frontend Technologies:** React
+- **Version Control:** Git, GitHub
+- **Tools:** Visual Studio Code, Postman
+- **Others:** Docker, Jest
+
+
+
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/<your-username>/CF-TopHacker.git
 
 
