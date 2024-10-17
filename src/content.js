@@ -1,29 +1,33 @@
 (function () {
   //mapping between user ranks and their corresponding colors
-  const colors = {
-    "Unrated,": "#000000",
-    "Не рейтинге,": "#000000",
-    Newbie: "#808080",
-    Новичок: "#808080",
-    Pupil: "#008000",
-    Ученик: "#008000",
-    Specialist: "#03a89e",
-    Специалист: "#03a89e",
-    Expert: "#0000ff",
-    Эксперт: "#0000ff",
-    "Candidate Master": "#aa00aa",
-    "Кандидат мастера": "#aa00aa",
-    Master: "#ff8c00",
-    Мастер: "#ff8c00",
-    "International Master": "#ff8c00",
-    "Международный мастер": "#ff8c00",
-    Grandmaster: "#ff0000",
-    Гроссмейстер: "#ff0000",
-    "International Grandmaster": "#ff0000",
-    "Международный гроссмейстер": "#ff0000",
-    "Legendary Grandmaster": "#ff0000",
-    "Легендарный гроссмейстер": "#ff0000",
-  };
+
+const colors = {
+  "Unrated,": "#000000",
+  "Не рейтинге,": "#000000",
+  Newbie: "#808080",
+  Новичок: "#808080",
+  Pupil: "#008000",
+  Ученик: "#008000",
+  Specialist: "#03a89e",
+  Специалист: "#03a89e",
+  Expert: "#0000ff",
+  Эксперт: "#0000ff",
+  "Candidate Master": "#aa00aa",
+  "Кандидат мастера": "#aa00aa",
+  Master: "#ff8c00",
+  Мастер: "#ff8c00",
+  "International Master": "#ff8c00",
+  "Международный мастер": "#ff8c00",
+  Grandmaster: "#ff0000",
+  Гроссмейстер: "#ff0000",
+  "International Grandmaster": "#ff0000",
+  "Международный гроссмейстер": "#ff0000",
+  "Legendary Grandmaster": "#ff0000",
+  "Легендарный гроссмейстер": "#ff0000",
+  Tourist: "#000000",
+  Туристический: "#000000",
+};
+
 
   // Select various elements from the DOM that will be removed/modified
   const standingsTable = document.querySelector(".datatable");
@@ -120,8 +124,10 @@
           } else if (userInfo.length === 4) {
             //Case where user has ranks: CM,IM,IGM,LGM and language is Russian
             userRank = `${userInfo[0].trim()} ${userInfo[2].trim()}`;
-          } else {
-            //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master
+
+          }else {
+            //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master and Tourist
+
             userRank = userInfo[0].trim();
           }
           userHandle = userInfo[userInfo.length - 1].trim();
@@ -374,10 +380,13 @@
         if (index === 1) {
           let text = `${hacker.handle}`;
           let fontWeight = 700;
-          if (
-            rank === "Legendary Grandmaster" ||
-            rank === "Легендарный гроссмейстер"
-          ) {
+
+          if (rank === "Tourist" || rank === "Туристический") {
+            //First letter of Tourist is red
+            text = `<span style = "color:#ff0000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
+          } else if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
+
+
             //First letter of LGM is black
             text = `<span style = "color:#000000;">${
               hacker.handle[0]
@@ -415,6 +424,11 @@
       //Adding last row of the table: Total Hacks
       if (index === hackerArray.length - 1) {
         insertLastRow(totals, tbody);
+      }
+      // Highlight this row if it's the current user
+      const currentUserHandle = document.querySelector('.lang-chooser > div:nth-of-type(2) > a:nth-of-type(1)').textContent.trim();
+      if (hacker.handle === currentUserHandle) {
+        row.style.backgroundColor = "#ddeeff"; // Apply highlight
       }
     });
 
