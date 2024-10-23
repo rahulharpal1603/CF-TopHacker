@@ -16,8 +16,8 @@
     👥 <img src="https://img.shields.io/badge/Contributors-2-green" alt="Contributors">
   </a>
   <a href="https://github.com/rahulharpal1603/CF-TopHacker/issues">
-    🐛 <img src="https://img.shields.io/badge/Issues-3-red" alt="Open Issues">
-  </a>
+  🐛 <img src="https://img.shields.io/github/issues/rahulharpal1603/CF-TopHacker" alt="Open Issues">
+</a>
 
   If you like this project, please ⭐ the repository to show your support!
 
