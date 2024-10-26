@@ -316,9 +316,63 @@ const colors = {
       totalCell.style.fontWeight = "bold";
     }
   }
+  
+  let currentPage = 1;
+  const usersPerPage = 100;
+
+  function renderPaginationControls(totalUsers) {
+    const paginationContainer = document.createElement("div");
+    paginationContainer.className = "pagination-controls";
+    paginationContainer.style.display = "flex";
+    paginationContainer.style.justifyContent = "center";
+    paginationContainer.style.marginTop = "20px";
+
+    const totalPages = Math.ceil(totalUsers / usersPerPage);
+    
+    // Previous button
+    const prevButton = document.createElement("button");
+    prevButton.textContent = "Previous";
+    prevButton.disabled = currentPage === 1;
+    prevButton.onclick = () => changePage(currentPage - 1);
+    paginationContainer.appendChild(prevButton);
+
+    // Page info
+    const pageInfo = document.createElement("span");
+    pageInfo.textContent = `Page ${currentPage} of ${totalPages}`;
+    pageInfo.style.margin = "0 10px";
+    paginationContainer.appendChild(pageInfo);
+
+    // Next button
+    const nextButton = document.createElement("button");
+    nextButton.textContent = "Next";
+    nextButton.disabled = currentPage === totalPages;
+    nextButton.onclick = () => changePage(currentPage + 1);
+    paginationContainer.appendChild(nextButton);
+
+    const existingPagination = document.querySelector(".pagination-controls");
+    if (existingPagination) {
+      existingPagination.remove();
+    }
+    parentNode.appendChild(paginationContainer);
+  }
+
+  function changePage(pageNumber) {
+    currentPage = pageNumber;
+    const existingTable = document.getElementById("hacksStandingsTable");
+    if (existingTable) {
+      existingTable.remove();
+    }
+    getAndInsertTable(); // Re-fetch and re-render the table with the new page
+  }
 
   function insertTable(hackerArray, probIndices, contestId, hacksWindow) {
-    const table = document.createElement("table"); //Creating the table element
+    const startIndex = (currentPage - 1) * usersPerPage;
+    const paginatedHackerArray = hackerArray.slice(
+      startIndex,
+      startIndex + usersPerPage
+    );
+
+    const table = document.createElement("table"); // Creating the table element
     table.id = "hacksStandingsTable";
     table.style.width = "100%";
     table.style.borderCollapse = "collapse";
@@ -332,7 +386,7 @@ const colors = {
       index = index.toUpperCase();
       headers.push(index);
     });
-    //Inserting the headers into the table
+
     headers.forEach((headerText, index) => {
       const th = document.createElement("th");
       if (index >= 3) {
@@ -353,14 +407,14 @@ const colors = {
     for (let i = 0; i < probIndices.length + 1; i++) {
       totals.push({ success: 0, fail: 0 });
     }
-    //Iterating over each hacker and inserting their information into the table
-    hackerArray.forEach((hacker, index) => {
+
+    paginatedHackerArray.forEach((hacker, index) => {
       totals[0].success += hacker.totalSuccess;
       totals[0].fail += hacker.totalFail;
       const rank = hacker.rank;
       const row = tbody.insertRow();
       const cells = [
-        index + 1,
+        startIndex + index + 1,
         hacker.handle,
         [hacker.totalSuccess, hacker.totalFail],
       ];
@@ -374,7 +428,7 @@ const colors = {
         totals[index + 1].success += hacker[probIndex].successCount;
         totals[index + 1].fail += hacker[probIndex].failCount;
       });
-      //Inserting the hacker's information into the table
+
       cells.forEach((value, index) => {
         const cell = row.insertCell();
         if (index === 1) {
@@ -385,12 +439,7 @@ const colors = {
             //First letter of Tourist is red
             text = `<span style = "color:#ff0000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
           } else if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
-
-
-            //First letter of LGM is black
-            text = `<span style = "color:#000000;">${
-              hacker.handle[0]
-            }</span>${hacker.handle.slice(1)}`;
+            text = `<span style = "color:#000000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
           } else if (rank === "Unrated," || rank === "Не рейтинге,") {
             //Unrated users are shown in black color but with a lighter font-weight
             fontWeight = 400;
@@ -406,10 +455,7 @@ const colors = {
           } else {
             cell.innerHTML = `<span style = "color: green" title = "Successful hacking attempts">+${value[0]}</span> : <span style = "color: red" title = "Unsuccessful hacking attempts">-${value[1]}</span>`;
             if (index >= 3) {
-              cell.setAttribute(
-                "hack-details",
-                `${hacker.handle} ${probIndices[index - 3]}`
-              );
+              cell.setAttribute("hack-details", `${hacker.handle} ${probIndices[index - 3]}`);
               cell.ondblclick = (event) => hacksWindow.openWindow(cell);
             }
           }
@@ -421,20 +467,21 @@ const colors = {
         cell.style.textAlign = "center";
       });
 
-      //Adding last row of the table: Total Hacks
-      if (index === hackerArray.length - 1) {
+      if (index === paginatedHackerArray.length - 1) {
         insertLastRow(totals, tbody);
       }
-      // Highlight this row if it's the current user
+
       const currentUserHandle = document.querySelector('.lang-chooser > div:nth-of-type(2) > a:nth-of-type(1)').textContent.trim();
       if (hacker.handle === currentUserHandle) {
-        row.style.backgroundColor = "#ddeeff"; // Apply highlight
+        row.style.backgroundColor = "#ddeeff";
       }
     });
 
     if (parentNode) {
       parentNode.appendChild(table);
     }
+
+    renderPaginationControls(hackerArray.length); // Add pagination controls
   }
 
   createButton();
