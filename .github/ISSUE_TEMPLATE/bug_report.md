@@ -15,15 +15,7 @@ assignees: ''
 A clear and concise description of what the bug is.
 
 ## Steps to Reproduce
-1. Go to the homepage.
-2. Log in with the following credentials:
-   - Username: `testuser`
-   - Password: `password123`
-3. Click on the **"Profile"** tab in the navigation menu.
-4. Scroll down to the **"Settings"** section.
-5. Click on the **"Update Profile"** button.
-6. See the error message that appears saying, "Unable to update profile."
-
+How can any other user reproduce this issue?
 
 ## Expected Behavior
 A clear and concise description of what you expected to happen.
