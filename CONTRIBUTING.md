@@ -1,44 +1,120 @@
 # Contributing to CF-TopHacker
 
-First off, thank you for considering contributing to this project! We’re excited to have you onboard. Below are a few guidelines to help you get started.
+Thank you for your interest in contributing to CF-TopHacker! This guide will help you set up the development environment and understand the contribution process.
 
-## Table of Contents
-1. [Code of Conduct](#code-of-conduct)
-2. [How Can I Contribute?](#how-can-i-contribute)
-   - [Reporting Bugs](#reporting-bugs)
-   - [Suggesting Features](#suggesting-features)
-   - [Pull Requests](#pull-requests)
-3. [Setting Up Your Environment](#setting-up-your-environment)
+## Getting Started
+
+### Prerequisites
+- Git installed on your machine
+- Google Chrome browser
+- A GitHub account
+
+### Fork and Clone
+1. Fork the repository by clicking the 'Fork' button at [CF-TopHacker](https://github.com/rahulharpal1603/CF-TopHacker)
+2. Clone your fork locally:
+```bash
+git clone https://github.com/YOUR-USERNAME/CF-TopHacker.git
+cd CF-TopHacker
+```
+
+3. Add the upstream repository as a remote:
+```bash
+git remote add upstream https://github.com/rahulharpal1603/CF-TopHacker.git
+```
+
+### Creating a Branch
+1. Ensure you're on the main branch:
+```bash
+git checkout main
+```
+
+2. Create and switch to a new branch:
+```bash
+git checkout -b feature/your-feature-name
+```
+Use descriptive branch names like `feature/add-sorting` or `fix/popup-layout`.
+
+## Development
+
+### Loading the Extension in Chrome
+1. Open Chrome and go to `chrome://extensions/`
+2. Enable "Developer mode" using the toggle in the top right
+3. Click "Load unpacked"
+4. Select the `src` directory from the cloned repository folder.
+
+### Testing Changes
+1. After modifying code:
+   - Click the refresh icon (🔄) next to the extension in `chrome://extensions/`
 
 
-## Contributing
+2. Testing Guidelines:
+   - Test on a Codeforces contest page
+   - Ensure popup renders properly
+   - Check the Chrome DevTools console for any errors
 
-We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+### Code Style Guidelines
+- Follow JavaScript best practices
+- Keep code modular and reusable
+- Comment complex logic
+- Use meaningful variable names related to Codeforces terminology
 
-## Code of Conduct
-Please read and abide by our [Code of Conduct](CODE_OF_CONDUCT.md) to ensure a welcoming environment for all.
+## Submitting Changes
 
+1. Commit your changes:
+```bash
+git add .
+git commit -m "Description of changes"
+```
 
-## How Can I Contribute?
+2. Push to your fork:
+```bash
+git push origin feature/your-feature-name
+```
 
-### Reporting Bugs
-If you find a bug, please open an issue using the [Bug Report Template](link-to-bug-report-template). Be sure to include details about the environment and the steps to reproduce the issue.
+3. Create a Pull Request:
+   - Go to [CF-TopHacker](https://github.com/rahulharpal1603/CF-TopHacker)
+   - Click "New Pull Request"
+   - Choose your fork and branch
+   - Include in your PR:
+     - Description of changes
+     - Screenshots of the extension in action
+     - Any related Codeforces features/pages affected
+     - Testing performed
 
-### Suggesting Features
-If you have an idea for a feature, please open an issue using the [Feature Request Template](link-to-feature-request-template). Be as detailed as possible.
+## Pull Request Review Process
+1. Maintainers will review your PR
+2. Make any requested changes
+3. Once approved, your PR will be merged
 
-### Pull Requests
-We welcome pull requests! Here’s how to get started:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature-name`).
-3. Make your changes and test thoroughly.
-4. Commit your changes (`git commit -m 'Add some feature'`).
-5. Push to your branch (`git push origin feature/your-feature-name`).
-6. Open a pull request against the `main` branch.
+## Keeping Your Fork Updated
+Regularly sync your fork with the upstream repository:
+```bash
+git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main
+```
 
-## Setting Up Your Environment
+## Troubleshooting
+If you encounter issues:
+1. Verify the extension is loaded correctly in `chrome://extensions/`
+2. Check the Console in Chrome DevTools for errors
+3. Ensure you're testing on Codeforces pages
+4. Try clearing Chrome's cache and reloading the extension
 
-1. Clone the repo:
-   ```bash
-   git clone https://github.com/username/repo-name.git
+## Feature Suggestions
+Before working on new features:
+1. Open an issue to discuss the feature
+2. Include use cases and benefits for Codeforces users
+3. Wait for maintainer approval before starting work
 
+## Questions or Problems?
+- Open an issue in the repository
+- Provide:
+  - Description of the problem
+  - Steps to reproduce
+  - Expected vs actual behavior
+  - Screenshots if applicable
+  - Chrome version and OS
+
+Thank you for contributing to CF-TopHacker!
