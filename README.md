@@ -9,15 +9,17 @@
 # CF TopHacker
 
   <a href="https://github.com/rahulharpal1603/CF-TopHacker/releases/tag/1.0.1">
-    🚀 <img src="https://img.shields.io/badge/Version-1.0.1-blue" alt="Version">
-  </a><a href="https://github.com/prettier/prettier">
-    🎨 <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" alt="Code Style: Prettier">
-  </a><a href="https://github.com/rahulharpal1603/CF-TopHacker/graphs/contributors">
-    👥 <img src="https://img.shields.io/badge/Contributors-2-green" alt="Contributors">
+    <img src="https://img.shields.io/badge/Version-1.0.1-blue" alt="Version">
+  </a>
+  <a href="https://github.com/prettier/prettier">
+    <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" alt="Code Style: Prettier">
+  </a>
+  <a href="https://github.com/rahulharpal1603/CF-TopHacker/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/rahulharpal1603/CF-TopHacker" alt="Contributors">
   </a>
   <a href="https://github.com/rahulharpal1603/CF-TopHacker/issues">
-  🐛 <img src="https://img.shields.io/github/issues/rahulharpal1603/CF-TopHacker" alt="Open Issues">
-</a>
+  <img src="https://img.shields.io/github/issues/rahulharpal1603/CF-TopHacker" alt="Open Issues">
+  </a>
 
   If you like this project, please ⭐ the repository to show your support!
 
@@ -72,13 +74,8 @@ We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.
 We expect all contributors to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it to understand our community guidelines and expectations.
 
 ## Tools and Technologies Used
-- **Programming Languages:** JavaScript
-- **Frameworks:** Node.js, Express.js
-- **Database:** MongoDB
-- **Frontend Technologies:** React
-- **Version Control:** Git, GitHub
-- **Tools:** Visual Studio Code, Postman
-- **Others:** Docker, Jest
+- **Programming Languages:** JavaScript (Vanilla)
+
 
 
 
