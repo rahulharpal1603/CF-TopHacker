@@ -4,10 +4,9 @@
   <!-- Logo in the Center -->
   <img src="https://github.com/user-attachments/assets/c4a782f8-95b9-4644-bf75-53dd5b3b4e9f" alt="Logo" width="128">
   <br><br> <!-- Line Breaks for Spacing -->
-<p>
+</p>
 
-# CF TopHacker
-
+<p align="center">
   <a href="https://github.com/rahulharpal1603/CF-TopHacker/releases/tag/1.0.1">
     <img src="https://img.shields.io/badge/Version-1.0.1-blue" alt="Version">
   </a>
@@ -20,15 +19,15 @@
   <a href="https://github.com/rahulharpal1603/CF-TopHacker/issues">
   <img src="https://img.shields.io/github/issues/rahulharpal1603/CF-TopHacker" alt="Open Issues">
   </a>
+</p>
 
   If you like this project, please ⭐ the repository to show your support!
 
 ## Table of Contents
--  [Description](#description)
+- [Description](#description)
 - [Features](#features)
 - [Usage](#usage)
 - [Contributing](#contributing)
-- [Code of Conduct](#code-of-conduct)
 - [Tools and Technologies Used](#tools-and-technologies-used)
 
 
@@ -69,19 +68,6 @@ Once the extension is installed, go to any Codeforces contest standings page. Yo
 
 We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
 
-## Code of Conduct
-
-We expect all contributors to adhere to our [Code of Conduct](CODE_OF_CONDUCT.md). Please read it to understand our community guidelines and expectations.
-
 ## Tools and Technologies Used
 - **Programming Languages:** JavaScript (Vanilla)
-
-
-
-
-## Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/<your-username>/CF-TopHacker.git
-
-
+- **Extensions Platform:** [Manifest V3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3)
