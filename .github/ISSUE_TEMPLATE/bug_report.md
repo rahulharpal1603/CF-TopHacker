@@ -28,7 +28,7 @@ If applicable, add screenshots to help explain your problem.
 ## Environment
 - **Device:** (e.g., Desktop, Mobile)
 - **Operating System:** (e.g., Windows 10, macOS Monterey)
-- **Extenstion Version:** (e.g., 1.0.0)
+- **Extension Version:** (e.g., 1.0.0)
 
 ## Additional Context
 Add any other context about the problem here (e.g., logs, errors, related issues).
