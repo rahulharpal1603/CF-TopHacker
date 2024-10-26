@@ -1,12 +1,34 @@
-![logo128](https://github.com/user-attachments/assets/c4a782f8-95b9-4644-bf75-53dd5b3b4e9f)
 # CF TopHacker
 
-![Version](https://img.shields.io/badge/Version-1.0.1-blue)
-[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
-![Contributors](https://img.shields.io/badge/Contributors-2-green)
-![Open Issues](https://img.shields.io/badge/Issues-3-red)
+<p align="center">
+  <!-- Logo in the Center -->
+  <img src="https://github.com/user-attachments/assets/c4a782f8-95b9-4644-bf75-53dd5b3b4e9f" alt="Logo" width="128">
+  <br><br> <!-- Line Breaks for Spacing -->
+</p>
 
-Chrome extension for displaying Hacks leaderboard on CF.
+<p align="center">
+  <a href="https://github.com/rahulharpal1603/CF-TopHacker/releases/tag/1.0.1">
+    <img src="https://img.shields.io/badge/Version-1.0.1-blue" alt="Version">
+  </a>
+  <a href="https://github.com/prettier/prettier">
+    <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" alt="Code Style: Prettier">
+  </a>
+  <a href="https://github.com/rahulharpal1603/CF-TopHacker/graphs/contributors">
+    <img src="https://img.shields.io/github/contributors/rahulharpal1603/CF-TopHacker" alt="Contributors">
+  </a>
+  <a href="https://github.com/rahulharpal1603/CF-TopHacker/issues">
+  <img src="https://img.shields.io/github/issues/rahulharpal1603/CF-TopHacker" alt="Open Issues">
+  </a>
+</p>
+
+  If you like this project, please ⭐ the repository to show your support!
+
+## Table of Contents
+- [Description](#description)
+- [Features](#features)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [Tools and Technologies Used](#tools-and-technologies-used)
 
 
 # Usage Guide:
@@ -28,5 +50,24 @@ Screenshots:
 
 ![Screenshot 3](https://github.com/user-attachments/assets/5137232d-1e1f-4923-80e4-558ce75992c6)
 
+## Description
+CF-TopHacker is a tool designed to help users track and analyze hacking contests on Codeforces. It provides real-time insights into contestant performance and standings.
 
 
+## Features
+- **Live Hacks Leaderboard**: Displays all top hackers for each contest alongside top performers.
+- **Real-Time Updates**: View live hacking results during the hacking phase.
+- **Post-Contest Summary**: After the hacking phase, the leaderboard continues to display the top hackers.
+- **Problem Weakness Analysis**: Helps users identify which problems have weak test cases, enabling better preparation for future contests.
+- **Lightweight Extension**: Efficient and easy to use.
+
+## Usage
+Once the extension is installed, go to any Codeforces contest standings page. You'll see a 'Hacks Standings' button that displays the live hacks leaderboard during the hacking phase and after it ends.
+
+## Contributing
+
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details.
+
+## Tools and Technologies Used
+- **Programming Languages:** JavaScript (Vanilla)
+- **Extensions Platform:** [Manifest V3](https://developer.chrome.com/docs/extensions/develop/migrate/what-is-mv3)
