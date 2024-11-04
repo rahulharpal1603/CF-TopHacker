@@ -1,33 +1,35 @@
 (function () {
   //mapping between user ranks and their corresponding colors
 
-const colors = {
-  "Unrated,": "#000000",
-  "Не рейтинге,": "#000000",
-  Newbie: "#808080",
-  Новичок: "#808080",
-  Pupil: "#008000",
-  Ученик: "#008000",
-  Specialist: "#03a89e",
-  Специалист: "#03a89e",
-  Expert: "#0000ff",
-  Эксперт: "#0000ff",
-  "Candidate Master": "#aa00aa",
-  "Кандидат мастера": "#aa00aa",
-  Master: "#ff8c00",
-  Мастер: "#ff8c00",
-  "International Master": "#ff8c00",
-  "Международный мастер": "#ff8c00",
-  Grandmaster: "#ff0000",
-  Гроссмейстер: "#ff0000",
-  "International Grandmaster": "#ff0000",
-  "Международный гроссмейстер": "#ff0000",
-  "Legendary Grandmaster": "#ff0000",
-  "Легендарный гроссмейстер": "#ff0000",
-  Tourist: "#000000",
-  Туристический: "#000000",
-};
+  const colors = {
+    "Unrated,": "#000000",
+    "Не рейтинге,": "#000000",
+    Newbie: "#808080",
+    Новичок: "#808080",
+    Pupil: "#008000",
+    Ученик: "#008000",
+    Specialist: "#03a89e",
+    Специалист: "#03a89e",
+    Expert: "#0000ff",
+    Эксперт: "#0000ff",
+    "Candidate Master": "#aa00aa",
+    "Кандидат мастера": "#aa00aa",
+    Master: "#ff8c00",
+    Мастер: "#ff8c00",
+    "International Master": "#ff8c00",
+    "Международный мастер": "#ff8c00",
+    Grandmaster: "#ff0000",
+    Гроссмейстер: "#ff0000",
+    "International Grandmaster": "#ff0000",
+    "Международный гроссмейстер": "#ff0000",
+    "Legendary Grandmaster": "#ff0000",
+    "Легендарный гроссмейстер": "#ff0000",
+    Tourist: "#000000",
+    Туристический: "#000000",
+  };
 
+  let cachedData = null;
+  let problemTotals = [];
 
   // Select various elements from the DOM that will be removed/modified
   const standingsTable = document.querySelector(".datatable");
@@ -124,8 +126,7 @@ const colors = {
           } else if (userInfo.length === 4) {
             //Case where user has ranks: CM,IM,IGM,LGM and language is Russian
             userRank = `${userInfo[0].trim()} ${userInfo[2].trim()}`;
-
-          }else {
+          } else {
             //Case where user has ranks: Unrated, Newbie, Pupil, Specialist, Expert, Master and Tourist
 
             userRank = userInfo[0].trim();
@@ -192,6 +193,17 @@ const colors = {
       }
       hackerArray = Object.values(hackers);
 
+      // Calculate problem totals once
+      problemTotals = probIndices.map((probIndex) => {
+        let success = 0;
+        let fail = 0;
+        hackerArray.forEach((hacker) => {
+          success += hacker[probIndex].successCount;
+          fail += hacker[probIndex].failCount;
+        });
+        return { success, fail };
+      });
+
       //Sorting the hackerArray based on the total number of successful hacks, if the total number of successful hacks are equal, then sorting based on the total number of unsuccessful hacks but in reverse.
       hackerArray.sort((a, b) => {
         if (b.totalSuccess !== a.totalSuccess) {
@@ -202,6 +214,7 @@ const colors = {
           return a.handle.localeCompare(b.handle);
         }
       });
+
       return { arr: hackerArray, hackDetails: hackDetails };
     }
   }
@@ -257,66 +270,57 @@ const colors = {
     let loadingSign = setInterval(loaderFunc, 150);
 
     const contestId = window.location.pathname.split("/")[2]; //Extracting the contestId from the URL
-
-    //Sending a message to the background.js file to fetch the HTML file for the hacks page (Only one request is needed to fetch the hacks page)
-    chrome.runtime.sendMessage(
-      { action: "getHacksStandings", contestId: contestId },
-      (response) => {
-        if (response) {
-          clearInterval(loadingSign); //Stop the loader animation
-          if (loader) {
-            loader.remove(); //Remove the loader element
-          }
-          if (response.hasOwnProperty("error")) {
-            alert("Failed to fetch hacks standings data.\n" + response.error);
-          } else {
-            parsingResult = parseResponse(response);
-            if (parsingResult.hasOwnProperty("error")) {
-              alert(parsingResult.error);
+    if (cachedData) {
+      // Use cached data if available
+      insertTable(
+        cachedData.hackerArray,
+        cachedData.probIndices,
+        cachedData.contestId,
+        cachedData.hacksWindow
+      );
+    } else {
+      // Fetch data from the background script if not cached
+      chrome.runtime.sendMessage(
+        { action: "getHacksStandings", contestId: contestId },
+        (response) => {
+          if (response) {
+            clearInterval(loadingSign); //Stop the loader animation
+            if (loader) {
+              loader.remove(); //Remove the loader element
+            }
+            if (response.hasOwnProperty("error")) {
+              alert("Failed to fetch hacks standings data.\n" + response.error);
             } else {
-              const hacksWindow = new HacksWindow(
-                parsingResult.hackDetails,
-                contestId
-              );
-              insertTable(
-                parsingResult.arr,
-                response.probIndices,
-                contestId,
-                hacksWindow
-              );
+              parsingResult = parseResponse(response);
+              if (parsingResult.hasOwnProperty("error")) {
+                alert(parsingResult.error);
+              } else {
+                const hacksWindow = new HacksWindow(
+                  parsingResult.hackDetails,
+                  contestId
+                );
+                cachedData = {
+                  hackerArray: parsingResult.arr,
+                  probIndices: response.probIndices,
+                  hackDetails: parsingResult.hackDetails,
+                  hacksWindow: hacksWindow,
+                  contestId: contestId,
+                };
+                insertTable(
+                  parsingResult.arr,
+                  response.probIndices,
+                  contestId,
+                  hacksWindow
+                );
+              }
             }
           }
+          alreadyRunning = false;
         }
-        alreadyRunning = false;
-      }
-    );
-  }
-  function insertLastRow(totals, tbody) {
-    const totalRow = tbody.insertRow();
-    let totalCell = totalRow.insertCell();
-    totalCell.textContent = "Total Hacks";
-    totalCell.style.border = "1px solid #ddd";
-    totalCell.style.padding = "8px";
-    totalCell.style.textAlign = "center";
-    totalCell.style.fontWeight = "bold";
-    totalCell.style.backgroundColor = "#f2f2f2";
-    totalCell.colSpan = 2;
-    for (let i = 0; i < totals.length; i++) {
-      totalCell = totalRow.insertCell();
-      const successCount = totals[i].success;
-      const failCount = totals[i].fail;
-      if (successCount === 0 && failCount === 0) {
-        totalCell.innerHTML = `-`;
-      } else {
-        totalCell.innerHTML = `<span style = "color: green" title = "Successful hacking attempts">+${successCount}</span> <br> <span style = "color: red" title = "Unsuccessful hacking attempts">-${failCount}</span>`;
-      }
-      totalCell.style.border = "1px solid #ddd";
-      totalCell.style.padding = "8px";
-      totalCell.style.textAlign = "center";
-      totalCell.style.fontWeight = "bold";
+      );
     }
   }
-  
+
   let currentPage = 1;
   const usersPerPage = 100;
 
@@ -328,7 +332,7 @@ const colors = {
     paginationContainer.style.marginTop = "20px";
 
     const totalPages = Math.ceil(totalUsers / usersPerPage);
-    
+
     // Previous button
     const prevButton = document.createElement("button");
     prevButton.textContent = "Previous";
@@ -355,16 +359,20 @@ const colors = {
     }
     parentNode.appendChild(paginationContainer);
   }
-
   function changePage(pageNumber) {
     currentPage = pageNumber;
+    // Remove the existing table if it exists
     const existingTable = document.getElementById("hacksStandingsTable");
     if (existingTable) {
       existingTable.remove();
     }
-    getAndInsertTable(); // Re-fetch and re-render the table with the new page
+    insertTable(
+      cachedData.hackerArray,
+      cachedData.probIndices,
+      cachedData.contestId,
+      cachedData.hacksWindow
+    ); // Insert the table for the current page
   }
-
   function insertTable(hackerArray, probIndices, contestId, hacksWindow) {
     const startIndex = (currentPage - 1) * usersPerPage;
     const paginatedHackerArray = hackerArray.slice(
@@ -380,7 +388,7 @@ const colors = {
 
     const thead = table.createTHead();
     const headerRow = thead.insertRow();
-    //Creating the headers of the table
+    // Creating the headers of the table
     const headers = ["Rank", "User", "Hacks"];
     probIndices.forEach((index) => {
       index = index.toUpperCase();
@@ -401,9 +409,9 @@ const colors = {
       headerRow.appendChild(th);
     });
 
-    //Creating the body of the table
+    // Creating the body of the table
     const tbody = table.createTBody();
-    let totals = [];
+    let totals = []; // Initialize totals for each problem
     for (let i = 0; i < probIndices.length + 1; i++) {
       totals.push({ success: 0, fail: 0 });
     }
@@ -418,7 +426,7 @@ const colors = {
         hacker.handle,
         [hacker.totalSuccess, hacker.totalFail],
       ];
-      //Iterating over each problem and inserting the number of successful and unsuccessful hacks
+
       probIndices.forEach((probIndex, index) => {
         probIndex = probIndex.toUpperCase();
         cells.push([
@@ -435,27 +443,33 @@ const colors = {
           let text = `${hacker.handle}`;
           let fontWeight = 700;
 
+          // Handling rank colors
           if (rank === "Tourist" || rank === "Туристический") {
-            //First letter of Tourist is red
-            text = `<span style = "color:#ff0000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
-          } else if (rank === "Legendary Grandmaster" || rank === "Легендарный гроссмейстер") {
-            text = `<span style = "color:#000000;">${hacker.handle[0]}</span>${hacker.handle.slice(1)}`;
+            text = `<span style="color:#ff0000;">${
+              hacker.handle[0]
+            }</span>${hacker.handle.slice(1)}`;
+          } else if (
+            rank === "Legendary Grandmaster" ||
+            rank === "Легендарный гроссмейстер"
+          ) {
+            text = `<span style="color:#000000;">${
+              hacker.handle[0]
+            }</span>${hacker.handle.slice(1)}`;
           } else if (rank === "Unrated," || rank === "Не рейтинге,") {
-            //Unrated users are shown in black color but with a lighter font-weight
             fontWeight = 400;
           }
-          //Creating the template for the hacker's handle
-          let template = `<a style ="font-family: Helvetica;font-weight:${fontWeight};text-decoration:none; color:${colors[rank]}" href="https://codeforces.com/profile/${hacker.handle}" target="_blank">${text}</a>`;
-          //Inserting the hacker's handle into the cell
+          let template = `<a style="font-family: Helvetica;font-weight:${fontWeight};text-decoration:none; color:${colors[rank]}" href="https://codeforces.com/profile/${hacker.handle}" target="_blank">${text}</a>`;
           cell.innerHTML = template;
         } else if (index >= 2) {
-          //Inserting the number of successful and unsuccessful hacks into the cell
           if (value[0] === 0 && value[1] === 0) {
             cell.innerHTML = `-`;
           } else {
-            cell.innerHTML = `<span style = "color: green" title = "Successful hacking attempts">+${value[0]}</span> : <span style = "color: red" title = "Unsuccessful hacking attempts">-${value[1]}</span>`;
+            cell.innerHTML = `<span style="color: green" title="Successful hacking attempts">+${value[0]}</span> : <span style="color: red" title="Unsuccessful hacking attempts">-${value[1]}</span>`;
             if (index >= 3) {
-              cell.setAttribute("hack-details", `${hacker.handle} ${probIndices[index - 3]}`);
+              cell.setAttribute(
+                "hack-details",
+                `${hacker.handle} ${probIndices[index - 3]}`
+              );
               cell.ondblclick = (event) => hacksWindow.openWindow(cell);
             }
           }
@@ -466,22 +480,65 @@ const colors = {
         cell.style.padding = "8px";
         cell.style.textAlign = "center";
       });
-
-      if (index === paginatedHackerArray.length - 1) {
-        insertLastRow(totals, tbody);
-      }
-
-      const currentUserHandle = document.querySelector('.lang-chooser > div:nth-of-type(2) > a:nth-of-type(1)').textContent.trim();
-      if (hacker.handle === currentUserHandle) {
-        row.style.backgroundColor = "#ddeeff";
-      }
     });
+
+    // Insert overall totals below the hacker rows
+    const overallTotalRow = tbody.insertRow();
+
+    const labelCell = overallTotalRow.insertCell();
+    labelCell.textContent = "Total Hacks";
+    labelCell.colSpan = 2;
+
+    // Apply styling for the gray background, border, center alignment, and bold text
+    labelCell.style.backgroundColor = "#f0f0f0";
+    labelCell.style.border = "1px solid #ddd";
+    labelCell.style.padding = "8px";
+    labelCell.style.textAlign = "center";
+    labelCell.style.fontWeight = "bold";
+    labelCell.style.fontSize = "16px";
+
+    let totalHacksSuccess = 0;
+    let totalHacksFail = 0;
+    const totalHacksCell = overallTotalRow.insertCell();
+
+    hackerArray.forEach((hacker) => {
+      totalHacksSuccess += hacker.totalSuccess || 0;
+      totalHacksFail += hacker.totalFail || 0;
+    });
+
+    // Display overall total hacks in the next cell
+    if (totalHacksSuccess === 0 && totalHacksFail === 0) {
+      totalHacksCell.innerHTML = `-`;
+    } else {
+      totalHacksCell.innerHTML = `<span style="color: green" title="Total successful hacking attempts">+${totalHacksSuccess}</span> <br> <span style="color: red" title="Total unsuccessful hacking attempts">-${totalHacksFail}</span>`;
+    }
+    totalHacksCell.style.border = "1px solid #ddd";
+    totalHacksCell.style.padding = "8px";
+    totalHacksCell.style.textAlign = "center";
+    totalHacksCell.style.fontWeight = "bold";
+
+    // Insert individual problem totals starting from the next cell
+    for (let i = 0; i < problemTotals.length; i++) {
+      const totalCell = overallTotalRow.insertCell();
+      const successCount = problemTotals[i].success || 0;
+      const failCount = problemTotals[i].fail || 0;
+
+      if (successCount === 0 && failCount === 0) {
+        totalCell.innerHTML = `-`;
+      } else {
+        totalCell.innerHTML = `<span style="color: green" title="Total successful hacking attempts">+${successCount}</span> <br> <span style="color: red" title="Total unsuccessful hacking attempts">-${failCount}</span>`;
+      }
+      totalCell.style.border = "1px solid #ddd";
+      totalCell.style.padding = "8px";
+      totalCell.style.textAlign = "center";
+      totalCell.style.fontWeight = "bold";
+    }
 
     if (parentNode) {
       parentNode.appendChild(table);
     }
 
-    renderPaginationControls(hackerArray.length); // Add pagination controls
+    renderPaginationControls(hackerArray.length);
   }
 
   createButton();
