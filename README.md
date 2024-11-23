@@ -46,9 +46,11 @@ Screenshots:
 
 ![Screenshot 1](https://github.com/user-attachments/assets/0f65cf40-bf78-4711-be73-b1ae30a20311)
 
-![Screenshot 2](https://github.com/user-attachments/assets/7266cff2-3b95-4293-a52b-5f6a9d396de1)
+![Screenshot 2](https://github.com/user-attachments/assets/7bcdbb8b-5822-476a-87d9-1dfc4f9473c7)
 
-![Screenshot 3](https://github.com/user-attachments/assets/5137232d-1e1f-4923-80e4-558ce75992c6)
+![Screenshot 3](https://github.com/user-attachments/assets/7266cff2-3b95-4293-a52b-5f6a9d396de1)
+
+![Screenshot 4](https://github.com/user-attachments/assets/5137232d-1e1f-4923-80e4-558ce75992c6)
 
 ## Description
 CF-TopHacker is a tool designed to help users track and analyze hacking contests on Codeforces. It provides real-time insights into contestant performance and standings.
