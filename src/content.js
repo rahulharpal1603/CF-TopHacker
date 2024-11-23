@@ -421,6 +421,10 @@
       totals[0].fail += hacker.totalFail;
       const rank = hacker.rank;
       const row = tbody.insertRow();
+      const currentUserHandle = document.querySelector('.lang-chooser > div:nth-of-type(2) > a:nth-of-type(1)').textContent.trim();
+      if (hacker.handle === currentUserHandle) {
+        row.style.backgroundColor = "#ddeeff"; // Apply highlight
+      
       const cells = [
         startIndex + index + 1,
         hacker.handle,
