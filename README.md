@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/rahulharpal1603/CF-TopHacker/releases/tag/1.5.0">
-    <img src="https://img.shields.io/badge/Version-1.0.1-blue" alt="Version">
+    <img src="https://img.shields.io/badge/Version-1.5.0-blue" alt="Version">
   </a>
   <a href="https://github.com/prettier/prettier">
     <img src="https://img.shields.io/badge/code_style-prettier-ff69b4.svg" alt="Code Style: Prettier">
