@@ -23,6 +23,8 @@
 
   If you like this project, please ⭐ the repository to show your support!
 
+  CodeForces Blog: https://codeforces.com/blog/entry/133244
+
 ## Table of Contents
 - [Description](#description)
 - [Features](#features)
